@@ -1,0 +1,26 @@
+<mat-card>
+    <h1>Form Builder</h1>
+    <div class="actions">
+      <button mat-raised-button color="primary" (click)="addTextField()">Add Text Field</button>
+      <button mat-raised-button color="accent" (click)="addCheckbox()">Add Checkbox</button>
+      <button mat-raised-button color="warn" (click)="addRadioButton()">Add Radio Button</button>
+    </div>
+    <div class="form-preview">
+      <h2>Preview</h2>
+      <div *ngFor="let field of fields" class="form-field">
+        <mat-form-field *ngIf="field.type === 'text'">
+          <mat-label>{{ field.label }}</mat-label>
+          <input matInput placeholder="Enter text">
+        </mat-form-field>
+        <div *ngIf="field.type === 'checkbox'">
+          <mat-checkbox>{{ field.label }}</mat-checkbox>
+        </div>
+        <div *ngIf="field.type === 'radio'">
+          <mat-radio-group>
+            <mat-radio-button>{{ field.label }}</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+  
