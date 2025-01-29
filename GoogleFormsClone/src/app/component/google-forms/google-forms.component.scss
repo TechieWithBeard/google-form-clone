@@ -1,17 +1,36 @@
-mat-card {
-    padding: 16px;
-    margin: 16px auto;
-    max-width: 800px;
+.form-card {
+    padding: 20px;
+    margin: 10px 0;
   }
-  .actions {
+  
+  .form-title {
+    width: 100%;
+  }
+  
+  .form-description {
+    width: 100%;
+  }
+  
+  .form-field-card {
+    margin: 10px 0;
+  }
+  
+  .footer-container {
     display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
+    justify-content: space-between;
+    margin-top: 20px;
   }
-  .form-preview {
-    margin-top: 16px;
+  
+  .left-action-container button, .right-action-container button {
+    margin-right: 10px;
   }
-  .form-field {
-    margin-bottom: 16px;
+  
+
+
+  .success-snackbar {
+    background-color: #4caf50; // Green background for success
+    color: white;
+    font-size: 16px;
+    text-align: center;
   }
   

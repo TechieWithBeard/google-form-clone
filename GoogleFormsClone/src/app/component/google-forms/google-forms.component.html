@@ -1,26 +1,72 @@
-<mat-card>
-    <h1>Form Builder</h1>
-    <div class="actions">
-      <button mat-raised-button color="primary" (click)="addTextField()">Add Text Field</button>
-      <button mat-raised-button color="accent" (click)="addCheckbox()">Add Checkbox</button>
-      <button mat-raised-button color="warn" (click)="addRadioButton()">Add Radio Button</button>
-    </div>
-    <div class="form-preview">
-      <h2>Preview</h2>
-      <div *ngFor="let field of fields" class="form-field">
-        <mat-form-field *ngIf="field.type === 'text'">
-          <mat-label>{{ field.label }}</mat-label>
-          <input matInput placeholder="Enter text">
+<form [formGroup]="form">
+    <mat-card class="form-card">
+      <mat-form-field class="form-title">
+        <input matInput placeholder="Form Title" formControlName="title" />
+        <mat-error *ngIf="form.get('title')?.hasError('required')">Title is required</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field class="form-description">
+        <textarea matInput placeholder="Form Description" rows="3" formControlName="description"></textarea>
+      </mat-form-field>
+    </mat-card>
+  
+    <!-- Dynamic Fields Section -->
+    <div *ngFor="let field of fields.controls; let i = index" [formGroup]="field" class="form-field-card" @listAnimation>
+      <mat-card>
+        <!-- Editable Label -->
+        <mat-form-field appearance="outline">
+          <mat-label>Edit Field Label</mat-label>
+          <input matInput formControlName="label" placeholder="Enter field label" />
+          <mat-error *ngIf="field.get('label')?.hasError('required')">Label is required</mat-error>
         </mat-form-field>
-        <div *ngIf="field.type === 'checkbox'">
-          <mat-checkbox>{{ field.label }}</mat-checkbox>
+  
+        <!-- Field Type-Specific UI -->
+        <ng-container [ngSwitch]="field.get('type')?.value">
+          <!-- Text Field -->
+          <mat-form-field appearance="outline" *ngSwitchCase="'text'">
+            <mat-label>{{ field.get('label')?.value }}</mat-label>
+            <input matInput formControlName="value" placeholder="Enter text" />
+          </mat-form-field>
+  
+          <!-- Checkbox Field -->
+          <div *ngSwitchCase="'checkbox'">
+            <mat-checkbox formControlName="value">{{ field.get('label')?.value }}</mat-checkbox>
+          </div>
+  
+          <!-- Radio Button Field -->
+          <div *ngSwitchCase="'radio'">
+            <mat-radio-group [formControl]="getFormControl(field, 'value')">
+                <mat-radio-button *ngFor="let option of field.get('options')?.value" [value]="option">
+                  {{ option }}
+                </mat-radio-button>
+              </mat-radio-group>
+              
+          </div>
+        </ng-container>
+  
+        <!-- Delete Field Button -->
+        <div class="actions">
+          <button mat-icon-button color="warn" (click)="deleteField(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </div>
-        <div *ngIf="field.type === 'radio'">
-          <mat-radio-group>
-            <mat-radio-button>{{ field.label }}</mat-radio-button>
-          </mat-radio-group>
-        </div>
+      </mat-card>
+    </div>
+  
+    <!-- Action Buttons -->
+    <div class="footer-container">
+      <div class="left-action-container">
+        <button mat-raised-button (click)="addTextField()" class="add-button">Add Text Field</button>
+        <button mat-raised-button (click)="addCheckbox()">Add Checkbox</button>
+        <button mat-raised-button (click)="addRadioButton()">Add Radio Button</button>
+      </div>
+  
+      <div class="right-action-container">
+        <button mat-raised-button color="warn" (click)="deleteForm()">Delete Form</button>
+
+        <button mat-raised-button color="primary" (click)="clearForm()">Clear Form</button>
+        <button mat-raised-button color="primary" (click)="submitForm()">Submit Form</button>
       </div>
     </div>
-  </mat-card>
+  </form>
   
