@@ -46,6 +46,40 @@ export class GoogleFormsComponent {
       description: [''],
       fields: this.fb.array([]),
     });
+
+    const savedForm = this.localStorageService.getForms();
+    if (savedForm.length > 0) {
+      const lastSavedForm = savedForm[savedForm.length - 1]; // Get the latest saved form
+      this.loadForm(lastSavedForm);
+    } else {
+      this.initializeEmptyForm(); // Create a new empty form
+    }
+    
+  }
+
+
+  initializeEmptyForm(){
+    this.form = this.fb.group({
+      title: ['', Validators.required],
+      description: [''],
+      fields: this.fb.array([]),
+    });
+  }
+  loadForm(savedForm: any) {
+    this.form = this.fb.group({
+      title: [savedForm.title || '', Validators.required],
+      description: [savedForm.description || ''],
+      fields: this.fb.array(
+        savedForm.fields.map((field: any) =>
+          this.fb.group({
+            label: [field.label, Validators.required],
+            type: [field.type, Validators.required],
+            value: field.type === 'radio' ? this.fb.control(field.value) : [field.value],
+            options: field.type === 'radio' ? this.fb.array(field.options || []) : null,
+          })
+        )
+      ),
+    });
   }
 
   get fields(): FormArray<FormGroup> {
@@ -85,6 +119,7 @@ export class GoogleFormsComponent {
   deleteField(index: number) {
     this.fields.removeAt(index);
   }
+
 
   deleteForm() {
     let forms = this.localStorageService.getForms();

@@ -21,12 +21,12 @@ export class LocalStorageService {
     forms[index] = updatedForm;
     this.saveForms(forms);
   }
-
   deleteForm(index: number): void {
     let forms = this.getForms();
     forms.splice(index, 1);
     this.saveForms(forms);
   }
+  
   
   
 }
